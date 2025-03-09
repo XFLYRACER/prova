@@ -31,7 +31,7 @@ document.getElementById('myForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     
     const formData = new URLSearchParams(new FormData(e.target));
-    const url = 'https://script.google.com/macros/s/AKfycbzMoDrMruyonVWWh_HqSYHSCXCYmaGto9mQSRho12Fn4PfXnexw3RPDLONjOUIWdFm_/exec';
+    const url = 'https://script.google.com/macros/s/AKfycbwVBGco0bIYJeyNtLLDrycSrCAD9eqhGwwAawoNwQUzKOaAStVNfLNs8A8p3crs4Ocr/exec';
 
     try {
         const response = await fetch(url, {
@@ -39,23 +39,21 @@ document.getElementById('myForm').addEventListener('submit', async (e) => {
             body: formData,
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            mode: 'cors'
+            }
         });
 
-        const result = await response.json();
+        const result = await response.text();
+        document.getElementById('message').innerHTML = 
+            response.ok ? 'Dati inviati!' : 'Errore: ' + result;
         
-        if(result.status === 'success') {
-            document.getElementById('message').innerHTML = '✅ Dati inviati!';
-            e.target.reset();
-        } else {
-            document.getElementById('message').innerHTML = '❌ Errore: ' + (result.message || 'Sconosciuto');
-        }
-        
+        if(response.ok) e.target.reset();
     } catch (error) {
-        document.getElementById('message').innerHTML = '⚠️ Errore di connessione';
+        document.getElementById('message').innerHTML = 'Errore di connessione';
     }
 });
 </script>
 </body>
 </html>
+
+
+
