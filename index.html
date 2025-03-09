@@ -26,21 +26,20 @@
         <div id="message"></div>
     </div>
 
-    <script>
-   
+<script>
 document.getElementById('myForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     
-    const formData = new FormData(e.target);
-    const url = 'https://script.google.com/macros/s/AKfycby_e0ckrImgOGdnJh_DaOxkF7zmtT_skGU1jMmKik6jF85rSW3xyaF9ONyTqryjihsn/exec';
+    const formData = new URLSearchParams(new FormData(e.target));
+    const url = 'https://script.google.com/macros/s/AKfycbx7-uJ_6hYwv1ruWB9miaFUJmWDvOHi-kuhnoJAhEVGVzSmBkLx2fp9k19Rg_r-hZif/exec';
 
-console.log('Invio a:', url);
-console.log('Dati:', Object.fromEntries(formData));
-    
     try {
         const response = await fetch(url, {
             method: 'POST',
-            body: formData // Invia FormData direttamente senza JSON
+            body: formData,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
         });
 
         const result = await response.text();
@@ -52,7 +51,6 @@ console.log('Dati:', Object.fromEntries(formData));
         document.getElementById('message').innerHTML = 'Errore di connessione';
     }
 });
-
-    </script>
+</script>
 </body>
 </html>
