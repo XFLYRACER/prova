@@ -27,33 +27,29 @@
     </div>
 
     <script>
-        document.getElementById('myForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const formData = new FormData(e.target);
-            const url = 'https://script.google.com/macros/s/AKfycbxRoc8kN7Fyvmhr1nRMX31dJQegb8d73wl1WpW5Db3sz_mPWxdQtXpocRtLBidnIhg/exec'; // Sostituisci con il tuo URL web app
+   
+document.getElementById('myForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target);
+    const url = 'https://script.google.com/macros/s/AKfycbxCB6EuxcFUSKCTGiIQLc4ME1Fo5gPlqmQXVBLdwD3BcsSpu93wTKjOxbToMaJbjIyi/exec';
 
-            try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(Object.fromEntries(formData))
-                });
-
-                if (response.ok) {
-                    document.getElementById('message').innerHTML = 
-                        'Dati inviati con successo!';
-                    e.target.reset();
-                } else {
-                    throw new Error('Errore nell\'invio');
-                }
-            } catch (error) {
-                document.getElementById('message').innerHTML = 
-                    'Errore: ' + error.message;
-            }
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            body: formData // Invia FormData direttamente senza JSON
         });
+
+        const result = await response.text();
+        document.getElementById('message').innerHTML = 
+            response.ok ? 'Dati inviati!' : 'Errore: ' + result;
+        
+        if(response.ok) e.target.reset();
+    } catch (error) {
+        document.getElementById('message').innerHTML = 'Errore di connessione';
+    }
+});
+
     </script>
 </body>
 </html>
