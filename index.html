@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Invio dati a Google Sheet</title>
+    <style>
+        .container { max-width: 400px; margin: 20px auto; padding: 20px; }
+        .form-group { margin-bottom: 15px; }
+        input { width: 100%; padding: 8px; }
+        button { padding: 10px 20px; background: #4CAF50; color: white; border: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form id="myForm">
+            <div class="form-group">
+                <input type="text" name="nome" placeholder="Nome">
+            </div>
+            <div class="form-group">
+                <input type="email" name="email" placeholder="Email">
+            </div>
+            <div class="form-group">
+                <input type="tel" name="telefono" placeholder="Telefono">
+            </div>
+            <button type="submit">Invia</button>
+        </form>
+        <div id="message"></div>
+    </div>
+
+    <script>
+        document.getElementById('myForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const url = 'https://script.google.com/macros/s/AKfycbxRoc8kN7Fyvmhr1nRMX31dJQegb8d73wl1WpW5Db3sz_mPWxdQtXpocRtLBidnIhg/exec'; // Sostituisci con il tuo URL web app
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(Object.fromEntries(formData))
+                });
+
+                if (response.ok) {
+                    document.getElementById('message').innerHTML = 
+                        'Dati inviati con successo!';
+                    e.target.reset();
+                } else {
+                    throw new Error('Errore nell\'invio');
+                }
+            } catch (error) {
+                document.getElementById('message').innerHTML = 
+                    'Errore: ' + error.message;
+            }
+        });
+    </script>
+</body>
+</html>
