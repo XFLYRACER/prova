@@ -26,12 +26,13 @@
         <div id="message"></div>
     </div>
 
+<!-- Client-side (HTML/JavaScript) -->
 <script>
 document.getElementById('myForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     
     const formData = new URLSearchParams(new FormData(e.target));
-    const url = 'https://script.google.com/macros/s/AKfycbwVBGco0bIYJeyNtLLDrycSrCAD9eqhGwwAawoNwQUzKOaAStVNfLNs8A8p3crs4Ocr/exec';
+    const url = 'https://script.google.com/macros/s/AKfycbzYR2HIH9Ug6I39vj1_SKlmqNWvXUlraQV_3wACIINxYEn_mCVKty8FJvUb4iZTe4U-/exec';
 
     try {
         const response = await fetch(url, {
@@ -42,16 +43,23 @@ document.getElementById('myForm').addEventListener('submit', async (e) => {
             }
         });
 
-        const result = await response.text();
-        document.getElementById('message').innerHTML = 
-            response.ok ? 'Dati inviati!' : 'Errore: ' + result;
+        const result = await response.json(); // Modificato da text() a json()
         
-        if(response.ok) e.target.reset();
+        if (result.status === 'success') {    // Controlliamo lo status nel JSON
+            document.getElementById('message').innerHTML = 'Dati inviati!';
+            e.target.reset();
+        } else {
+            document.getElementById('message').innerHTML = 'Errore: ' + result.message;
+        }
     } catch (error) {
-        document.getElementById('message').innerHTML = 'Errore di connessione';
+        document.getElementById('message').innerHTML = 'Errore di connessione: ' + error.message;
     }
 });
 </script>
+
+
+
+    
 </body>
 </html>
 
