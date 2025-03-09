@@ -31,7 +31,7 @@ document.getElementById('myForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     
     const formData = new URLSearchParams(new FormData(e.target));
-    const url = 'https://script.google.com/macros/s/AKfycbyBxXAe4YysYr_q4-3533WVA3hM5qeyJE_MzXRKVg7s27hjm9238-2Z-Z6IGmgrVdSx/exec';
+    const url = 'https://script.google.com/macros/s/AKfycbyxvcvhoJaeUnQFthAjxeydvy0vRljA7vKZXQAmJU34Tk5ImpeKeo6EiYF2TbfdB0V5/exec';
 
     try {
         const response = await fetch(url, {
@@ -45,11 +45,11 @@ document.getElementById('myForm').addEventListener('submit', async (e) => {
 
         const result = await response.json();
         document.getElementById('message').innerHTML = 
-            result.status === 'success' ? '✅ Dati inviati con successo!' : '❌ Errore: ' + result.message;
+            result.status === 'success' ? '✅ Dati inviati!' : '❌ Errore: ' + result.message;
         
         if(result.status === 'success') e.target.reset();
     } catch (error) {
-        document.getElementById('message').innerHTML = '⚠️ Errore di connessione al server';
+        document.getElementById('message').innerHTML = '⚠️ Errore di connessione';
     }
 });
 </script>
