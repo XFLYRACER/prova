@@ -55,6 +55,10 @@ document.getElementById('myForm').addEventListener('submit', async (e) => {
         document.getElementById('message').innerHTML = 'Errore di connessione: ' + error.message;
     }
 });
+
+
+    window.addEventListener('error', (event) => {
+    console.error('Errore globale:', event.error);
 </script>
 
 
