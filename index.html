@@ -34,6 +34,9 @@ document.getElementById('myForm').addEventListener('submit', async (e) => {
     const formData = new FormData(e.target);
     const url = 'https://script.google.com/macros/s/AKfycby_e0ckrImgOGdnJh_DaOxkF7zmtT_skGU1jMmKik6jF85rSW3xyaF9ONyTqryjihsn/exec';
 
+console.log('Invio a:', url);
+console.log('Dati:', Object.fromEntries(formData));
+    
     try {
         const response = await fetch(url, {
             method: 'POST',
