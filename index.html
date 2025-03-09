@@ -31,29 +31,47 @@ document.getElementById('myForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     
     const formData = new URLSearchParams(new FormData(e.target));
-    const url = 'https://script.google.com/macros/s/AKfycbyU0RtmKGOpdmDeUTwy7cGDpdXKXAt2Zg2eYpYE_mHo-wAv4KKAvbpDRmjhgpkd8pQp/exec';
+    const url = 'https://script.google.com/macros/s/AKfycby4zrQlziJQYer82fG6Bk6sOwEOGoh5bnmquxDkJT9-oFyJmYuGrF4x0b9K_iAOPWvS/exec'; // Sostituisci con URL reale
 
     try {
+        // 1. Test connessione preliminare
+        const ping = await fetch(url, {method: 'OPTIONS'});
+        if (!ping.ok) throw new Error('Server non raggiungibile');
+
+        // 2. Invio dati
         const response = await fetch(url, {
             method: 'POST',
             body: formData,
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            mode: 'cors'
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            mode: 'cors',
+            redirect: 'follow'
         });
 
+        // 3. Gestione errori HTTP
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`HTTP ${response.status}: ${errorText}`);
+        }
+
+        // 4. Parsing risposta
         const result = await response.json();
         
         if(result.status === 'success') {
-            document.getElementById('message').innerHTML = '✅ Dati inviati con successo!';
+            document.getElementById('message').innerHTML = '✅ Dati inviati!';
             e.target.reset();
         } else {
             document.getElementById('message').innerHTML = '❌ Errore: ' + (result.message || 'Sconosciuto');
         }
         
     } catch (error) {
-        document.getElementById('message').innerHTML = '⚠️ Errore di connessione al server';
+        console.error('Errore completo:', error);
+        document.getElementById('message').innerHTML = 
+            `⚠️ Errore: ${error.message} <br> Verifica: 
+            <ul>
+                <li>Connessione internet attiva</li>
+                <li>URL corretto nello script</li>
+                <li>Autorizzazioni dello script</li>
+            </ul>`;
     }
 });
 </script>
