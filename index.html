@@ -31,35 +31,33 @@
 document.getElementById('myForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     
+    const url = 'https://script.google.com/macros/s/AKfycbwqRlWJvu0TOJfAeESgyRWH5hxfh_pbMeU6MgKsjMIrIFxaMFiadefL-HVnxqP1QWT7/exec'; // Assicurati sia l'URL corretto
     const formData = new URLSearchParams(new FormData(e.target));
-    const url = 'https://script.google.com/macros/s/AKfycbyjT9cR1xci-c_v7t5uYwkKmJIeJMeIHDMYtBFYNwRcwgfUFYbyikrD2gTsoHCHiZQP/exec';
 
     try {
         const response = await fetch(url, {
             method: 'POST',
             body: formData,
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            redirect: 'follow' // Aggiungi questa linea
         });
 
-        const result = await response.json(); // Modificato da text() a json()
+        // Controlla se la risposta è valida
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         
-        if (result.status === 'success') {    // Controlliamo lo status nel JSON
-            document.getElementById('message').innerHTML = 'Dati inviati!';
+        const result = await response.json();
+
+        if (result.status === 'success') {
+            document.getElementById('message').innerHTML = '✅ Dati inviati!';
             e.target.reset();
         } else {
-            document.getElementById('message').innerHTML = 'Errore: ' + result.message;
+            document.getElementById('message').innerHTML = `❌ ${result.message}`;
         }
     } catch (error) {
-        document.getElementById('message').innerHTML = 'Errore di connessione: ' + error.message;
+        document.getElementById('message').innerHTML = `⚠️ Errore: ${error.message}`;
+        console.error('Errore completo:', error);
     }
 });
-
-
-    window.addEventListener('error', (event) => {
-    console.error('Errore globale:', event.error);
-        });
 </script>
 
 
